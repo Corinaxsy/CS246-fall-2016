@@ -1,0 +1,50 @@
+Group g1 with name "julia" has been created.
+Group g1 =
+julia
+[]
+
+Added email address "workpermit" to group g1 =
+julia
+[workpermit]
+
+Group g1 =
+julia
+[workpermit]
+
+Group g2 with name "stat230" has been created.
+Added email address "stat230a1" to group g2 =
+stat230
+[stat230a1]
+
+Move g2 to g1
+g1 =
+julia
+[workpermit]
+	stat230
+	[stat230a1]
+
+Group g1 =
+julia
+[workpermit]
+	stat230
+	[stat230a1]
+
+Added email address "UHIP" to group g1 =
+julia
+[UHIP, workpermit]
+	stat230
+	[stat230a1]
+
+Group g1 =
+julia
+[UHIP, workpermit]
+	stat230
+	[stat230a1]
+
+Find group name "stat231" in group g1 unsuccessfully
+Group g1 =
+julia
+[UHIP, workpermit]
+	stat230
+	[stat230a1]
+

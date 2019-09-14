@@ -1,0 +1,18 @@
+b g1 julia
+p g1
+aa g1 workpermit
+p g1
+b g2 stat230
+aa g2 stat230a1
+ag g1 g2
+p g1
+aa g1 UHIP
+p g1
+ra g1 workpermit
+p g1
+ra g1 UHIP
+p g1
+ra g1 stat230a1
+p g1
+rg g1 stat
+p g1

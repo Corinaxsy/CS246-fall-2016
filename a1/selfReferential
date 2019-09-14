@@ -1,0 +1,7 @@
+#!/bin/bash
+for filename in *;do
+   grep -F -q $filename $filename
+   if [ "$?" -eq 0 ];then
+     echo $filename
+   fi
+done

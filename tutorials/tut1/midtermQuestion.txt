@@ -1,0 +1,10 @@
+Which of these does not feed the contents
+of myfile.txt to stdin of myscript?
+
+a) ./myscript < myfile.txt
+
+b) cat myfile.txt | ./myscript
+
+c) ./myscript myfile.txt
+
+d) None of the above

@@ -1,0 +1,156 @@
+\documentclass{article}
+\usepackage{fixltx2e}
+\usepackage{listings}
+\usepackage{graphicx}
+%\usepackage{minted}
+%\usepackage{upquote}
+\usepackage[margin=0.75in]{geometry}
+\usepackage{url}
+\usepackage[T1]{fontenc}
+
+\AtBeginDocument{%
+  \def\PYZsq{\textquotesingle}%
+}
+
+\title{CS 246 Fall 2016 - Tutorial 9}
+\author{}
+\date{November 9, 2016}
+\begin{document}
+\maketitle
+
+\section{Summary}
+\begin{itemize}
+\item Abstract Classes
+\item Vectors
+\item Exception Handling
+\item Code Review
+\end{itemize}
+
+\section{Tip of the Week: commands from vi}
+
+\begin{itemize}
+    \item You can do find and replace with vim using: :\%s/old/new/g where \texttt{old} is the text you want to replace, and \texttt{new} is the replacement text.
+
+    \item Similarly, you can replace with a confirmation using: :\%s/old/new/gc
+\end{itemize}
+
+
+\section{Abstract Classes}
+
+\begin{itemize}
+
+\item The purpose of an abstract class is to allow subclasses to inherit from a base class containing information that is common to all other subclasses, and when you know there shouldn't be any instance of the base class. A class becomes 'abstract' when it has one or more pure virtual functions.
+
+\item Note: Your destructors should always be virtual. They must always have an implementation; even if they are pure virtual.
+
+\item Why? Because the destructor of the base class is called even when a derived class is destroyed; this is because every derived class possesses the components of the base class. Thus, the destructor of the base must have some implementation (even if the implementation is empty).
+
+\end{itemize}
+
+Note: Any function that is pure virtual requires its own implementation in the subclasses. We declare a function as pure virtual when we add \texttt{= 0;} to the end of it.
+
+\begin{verbatim}
+
+
+
+class B{
+  ...
+  virtual string hello() = 0; // the function hello is pure virtual
+                              // thus making B an abstract class.
+  virtual ~B(){};
+};
+\end{verbatim}
+\newpage
+\begin{verbatim}
+class A: public B{
+    ... // inherits its fields from B
+    A* arr;
+    A(): arr{new A[5]} {}
+    ~A(){delete [] arr;}
+    string hello() override{
+        return "bonjour";
+    }
+};
+
+\end{verbatim}
+
+Class A inherits from the abstract class B which has a pure virtual destructor. Now, every class that inherits from B has to provide its own implementation of the destructor.
+
+\section{Vectors}
+
+Vectors make dynamic allocation easier; any time you make an array, you could probably achieve the same result with a vector.
+
+Example:
+\begin{verbatim}
+#include <vector>
+#include <iostream>
+
+using namespace std;
+int main(){
+    vector<int> arr; //creating a vector of integers
+    int x;
+    while(cin >> x){
+        arr.emplace_back(x); //continuously adding integers to arr
+                          //and increasing the size of the array without
+                          //manually allocating more memory.
+    }
+    for(int i = 0; i < arr.size(); i++){
+        cout << arr[i]; //outputting the values in arr.
+    }
+}
+
+\end{verbatim}
+
+The vector class has a wealth of functions to access and manipulate the elements of the vector; knowing them is a matter of looking up the functions in the vector class and how to use them.
+
+\section{Exception Handling}
+
+Instead of using C-style methods of handling errors, we use exceptions in C++ to control the behaviour of the program when errors arise.
+
+Recall that we catch exceptions with try and catch blocks.
+
+\begin{verbatim}
+    try{
+        throw 42;
+    }
+    catch(...) // ... means 'catch anything'
+    {
+        cerr << "Caught something" << endl;
+    }
+\end{verbatim}
+\newpage
+We can throw \textbf{anything}, and we always catch by reference.
+
+Consider the code below:
+
+\begin{verbatim}
+class BadInput{};
+
+class BadNumber: public BadInput{
+    string what() { return "no number given" }
+};
+
+int main(){
+    try{
+        cin >> x;
+        if (x < 50){
+            throw BadNumber{};
+        }
+    }
+    catch(BadInput& b){}
+    catch(BadNumber& b){ cerr << b.what() << endl; } //accessing auxilliary information
+                                                     //from object that was caught
+
+}
+\end{verbatim}
+\begin{itemize}
+\item Question: Which handler would run?
+
+\item Note: If we weren't passing objects by reference in the catch parameter, slicing could occur; potentially resulting in missing information.
+
+\item Good practice: Throw by value, catch by reference.
+
+\end{itemize}
+
+
+\end{document}

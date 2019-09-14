@@ -1,0 +1,47 @@
+#!/bin/bash
+if [ ${#} != 2 ];then
+   echo "The number of parameters is incorrect." 1>&2
+   exit 1
+fi
+lst=`cat $1`
+for i in $lst;do
+  if [ ! -e "$i.in" ];then
+    echo "$i.in does not exist" 1>&2
+    exit 1
+  fi
+  if [ ! -e "$i.out" ];then
+    echo "$i.out does not exist" 1>&2
+    exit 1
+  fi
+  if [ ! -r "$i.out" ];then
+    echo "$i.out is not readable" 1>&2
+    exit 1
+  fi
+  if [ ! -r "$i.in" ];then
+    echo "$i.in is not readable" 1>&2
+    exit 1
+  fi
+done
+
+for i in $lst;do
+  Temp=`mktemp /tmp/${i}.XXXXXXXX`
+  if [ ! -e ${i}.args ];then
+  ./$2 < $i.in > $Temp
+  else
+  prmt=`cat ${i}.args`
+  ./$2 $prmt < $i.in > $Temp
+  fi
+  diff $Temp ${i}.out > ./diff
+  if [ $? != 0 ];then
+     echo "Test failed: $i"
+     echo "Input:"
+     cat ${i}.in
+     echo "Expected:"
+     cat ${i}.out
+     echo "Actual:"
+     cat $Temp
+  else echo "pass"
+  fi
+  rm $Temp
+  rm ./diff
+done

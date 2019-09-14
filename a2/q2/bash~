@@ -1,0 +1,5 @@
+#! /bin/bash
+
+b=`cat "$1"`
+
+echo b
